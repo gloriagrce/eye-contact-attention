@@ -1,0 +1,59 @@
+---
+title: "Stat 341 -- Project Milestone 1"
+author: "Gloria Grace & Sherise Immanuela"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    code_download: true
+---
+
+```{r, setup, include = FALSE, message=FALSE}
+# load packages that are going to be used
+library(mosaic)      # this loads ggformula (for plotting), etc. too
+library(fastR2)      # some data sets
+library(pander)      # nicely formatted tables with pander()
+library(knitr)       # so you can use kable() for tables
+library(patchwork)   # for combining plots
+
+# data wrangling
+library(tidyverse)
+
+# several packages for bayesian stuff -- more may come later
+library(tidybayes)    
+library(bayesplot)
+library(dagitty)
+
+# Some customization. You can alter or delete as desired (if you know what you are doing).
+
+theme_set(theme_bw())     # change theme for ggplot2/ggformula
+
+knitr::opts_chunk$set(
+  tidy = FALSE,     # display code as typed (rather than reformatted)
+  fig.width = 4,    # adjust this to make figures wider or narrower
+  fig.height = 2.5, # adjust this to make figures taller or shorrter
+  size = "small")   # slightly smaller font for code
+```
+
+```{r}
+base_directory = "~/Desktop/Spring '23/STAT341/Project/FinalProject/data/eyeContact-in-conversation"
+mlvar_data = read.csv(paste(base_directory,'/Analyses/SA_data_for_mlvar_ana.csv',sep=''))
+#make subjects and dyads factors
+mlvar_data$subject <- as.factor(mlvar_data$subject)
+mlvar_data$dyad <- as.factor(mlvar_data$dyad)
+#compute synchrony, log transform to correct for heteroscedasticity
+mlvar_data$Synchrony <- -log(mlvar_data$dtw)
+colnames(mlvar_data) <- c('X','dyad','subject','dtw','EyeContact','PupilSize','Synchrony')
+```
+
+```{r}
+glimpse(mlvar_data)
+```
+
+The data is from a research conducted by Sophie Wohltjen and Thalia Wheatley. Their research paper can be found here: <https://www.pnas.org/doi/10.1073/pnas.2106645118>
+
+This research paper examines the role of eye contact in conversation. The authors found that when two people are talking, eye contact is a key factor in determining when shared attention between them is rising or falling. It was found that when two people are engaging in conversation, eye contact increases as the conversation progresses, indicating a rise in shared attention.
+
+For this project, the question we are interested in answering is: How does eye contact affect shared attention in conversations?
+
+
+
